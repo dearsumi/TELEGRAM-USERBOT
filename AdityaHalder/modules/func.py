@@ -30,18 +30,7 @@ async def put_que(chat_id, file, type):
     else:
         que = db[chat_id]
         que.append(put)
-        return int(len(que)-1)
-
-
-@call.on_kicked()
-async def kicked_handler(_, chat_id: int):
-    try:
-        check = db.get(chat_id)
-        if check:
-            return check.pop(0)
-        return
-    except:
-        pass
+        return int(len(que) - 1)
 
 
 @call.on_closed_voice_chat()
@@ -94,4 +83,4 @@ async def stream_end_handler(_, update: Update):
                 return await call.change_stream(chat_id, stream)
         return
     except Exception as e:
-        print(f"**Error:** `{e}`")
+        print(f"**Error: Contact @dear_sumi")
