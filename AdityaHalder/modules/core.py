@@ -2,7 +2,6 @@ import asyncio
 
 from pyrogram import Client
 from pyrogram.types import ChatPrivileges
-from pytgcalls import PyTgCalls
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from .vars import Config
@@ -14,7 +13,7 @@ ass_power = ChatPrivileges(
     can_restrict_members=True,
     can_pin_messages=True,
     can_manage_video_chats=True,
-    can_promote_members=True,    
+    can_promote_members=True,
     can_invite_users=True
 )
 
@@ -24,7 +23,7 @@ bot_power = ChatPrivileges(
     can_restrict_members=True,
     can_pin_messages=True,
     can_manage_video_chats=True,
-    can_promote_members=True,    
+    can_promote_members=True,
     can_invite_users=True
 )
 
@@ -33,39 +32,33 @@ try:
     MONGO_DB_URL = Config.MONGO_DATABASE
     _mongo_async_ = AsyncIOMotorClient(MONGO_DB_URL)
     mongodb = _mongo_async_.Genius
-    LOGGER.info("Succesfully Connected.")
+    LOGGER.info("Successfully Connected.")
 except Exception as e:
     print(f"Error: {e}")
     LOGGER.error("Failed To Connect To Your Mongo Database.")
     exit()
 
-class Aditya(Client, PyTgCalls):
+class Aditya:
     def __init__(self):
         self.app = Client(
-            name = "AdityaHalder",
-            api_id = Config.API_ID,
-            api_hash = Config.API_HASH,
-            session_string = Config.STRING_SESSION,
+            name="AdityaHalder",
+            api_id=Config.API_ID,
+            api_hash=Config.API_HASH,
+            session_string=Config.STRING_SESSION,
         )
         self.ass = Client(
-            name = "AdityaPlayer",
-            api_id = Config.API_ID,
-            api_hash = Config.API_HASH,
-            session_string = Config.SESSION_STRING,
+            name="AdityaPlayer",
+            api_id=Config.API_ID,
+            api_hash=Config.API_HASH,
+            session_string=Config.SESSION_STRING,
         )
         self.bot = Client(
-            name = "AdityaServer",
-            api_id = Config.API_ID,
-            api_hash = Config.API_HASH,
-            bot_token = Config.BOT_TOKEN,
+            name="AdityaServer",
+            api_id=Config.API_ID,
+            api_hash=Config.API_HASH,
+            bot_token=Config.BOT_TOKEN,
         )
-        if Config.SESSION_STRING:
-            self.call = PyTgCalls(self.ass)
-        else:
-            self.call = PyTgCalls(self.app)
-  
 
-    
     async def start(self):
         LOGGER.info("Starting Userbot")
         await self.app.start()
@@ -76,32 +69,32 @@ class Aditya(Client, PyTgCalls):
         if self.app.id not in Config.SUDOERS:
             Config.SUDOERS.add(int(self.app.id))
         try:
-            await self.app.join_chat("THE_VIP_BOY")
-            await self.app.join_chat("VIP_CREATORS")
-            await self.app.join_chat("TG_FRIENDSS")
+            await self.app.join_chat("SuMelodyVibes")
+            await self.app.join_chat("dear_sumi")
+            await self.app.join_chat("SuMelodyVibes" )
         except:
             pass
         await self.app.send_message(Config.LOG_GROUP_ID, "**Userbot Started**")
         LOGGER.info(f"Userbot Started as {self.app.name}")
-        LOGGER.info("Starting PyTgCalls")
-        if Config.SESSION_STRING:
-            await self.ass.start()
-            self.ass.name = self.ass.me.first_name + "" + (self.ass.me.last_name or "")
-            self.ass.username = self.ass.me.username
-            self.ass.mention = self.ass.me.mention
-            self.ass.id = self.ass.me.id
-            try:
-                await self.ass.join_chat("THE_VIP_BOY")
-                await self.ass.join_chat("VIP_CREATORS")
-                await self.ass.join_chat("TG_FRIENDSS")
-            except:
-                pass
-            try:
-                await self.ass.send_message(Config.LOG_GROUP_ID, "**Vc Assistant Started.**")
-            except:
-                pass
-            LOGGER.info(f"Vc Assistant Started as {self.ass.name}")
-        await self.call.start()
+
+        LOGGER.info("Starting Assistant")
+        await self.ass.start()
+        self.ass.name = self.ass.me.first_name + "" + (self.ass.me.last_name or "")
+        self.ass.username = self.ass.me.username
+        self.ass.mention = self.ass.me.mention
+        self.ass.id = self.ass.me.id
+        try:
+            await self.ass.join_chat("SuMelodyVibes")
+            await self.ass.join_chat("dear_sumi")
+            await self.ass.join_chat("SuMelodyVibes")
+        except:
+            pass
+        try:
+            await self.ass.send_message(Config.LOG_GROUP_ID, "**Assistant Started.**")
+        except:
+            pass
+        LOGGER.info(f"Assistant Started as {self.ass.name}")
+
         LOGGER.info("Starting Helperbot")
         await self.bot.start()
         self.bot.name = self.bot.me.first_name + "" + (self.bot.me.last_name or "")
@@ -129,6 +122,7 @@ class Aditya(Client, PyTgCalls):
             LOGGER.error("Please Promote Bot in Your Log Group")
             exit()
         LOGGER.info(f"Helperbot Started as {self.bot.name}")
+
         if self.app.id not in Config.SUDOERS:
             Config.SUDOERS.add(int(self.app.id))
         sudoersdb = mongodb.sudoers
@@ -145,6 +139,4 @@ class Aditya(Client, PyTgCalls):
             for user_id in sudoers:
                 if user_id not in Config.SUDOERS:
                     Config.SUDOERS.add(user_id)
-        LOGGER.info(f"All Sudoers Loaded.")
-        
-
+        LOGGER.info("All Sudoers Loaded.")
