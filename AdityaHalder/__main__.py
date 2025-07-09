@@ -1,12 +1,9 @@
 import asyncio
 import importlib
 
-from pytgcalls import idle
-
 from . import aditya as client
-from .import PLUGINS, log
+from . import PLUGINS, log
 from .plugins import ALL_PLUGINS
-
 
 loop = asyncio.get_event_loop()
 
@@ -15,19 +12,19 @@ async def aditya():
     log.info("Importing all plugins ...")
     for all_plugin in ALL_PLUGINS:
         imported_plugin = importlib.import_module(
-            "AdityaHalder.plugins." + all_plugin)
-        if (hasattr(imported_plugin, "__NAME__"
-           ) and imported_plugin.__NAME__):
+            "AdityaHalder.plugins." + all_plugin
+        )
+        if hasattr(imported_plugin, "__NAME__") and imported_plugin.__NAME__:
             imported_plugin.__NAME__ = imported_plugin.__NAME__
-            if (hasattr(imported_plugin, "__MENU__"
-                ) and imported_plugin.__MENU__):
-                PLUGINS[imported_plugin.__NAME__.lower()
-                ] = imported_plugin
+            if hasattr(imported_plugin, "__MENU__") and imported_plugin.__MENU__:
+                PLUGINS[imported_plugin.__NAME__.lower()] = imported_plugin
         log.info(f">> Importing: {all_plugin}.py")
     log.info(">> Successfully Imported All Plugins.")
     await asyncio.sleep(1)
     log.info("Userbot is Now Ready to Use !")
-    await idle()
+
+    # Keep the bot running
+    await asyncio.Event().wait()
 
 if __name__ == "__main__":
     loop.run_until_complete(aditya())
